@@ -1,0 +1,106 @@
+﻿@{
+    Layout = "_LayuiLayout";
+}
+@model Users
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <style type="text/css">
+        .layui-form-label {
+            width: 110px;
+        }
+    </style>
+</head>
+<body>
+    <br />
+    <form class="layui-form" lay-filter="EditForm" action="/Common/User/Save" method="post">
+        @Html.HiddenFor(m => m.UniqueId)
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label"><font color="red">*</font>@Html.LabelFor(m => m.Name_Cn)</label>
+                <div class="layui-input-inline">
+                    @Html.TextBoxFor(m => m.Name_Cn, new Dictionary<string, object>() { { "id", "Name_Cn" }, { "class", "layui-input" }, { "lay-verify", "required" } })
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <div class="layui-inline">
+                    <label class="layui-form-label">@Html.LabelFor(m => m.Name_En)</label>
+                    <div class="layui-input-inline">
+                        @Html.TextBoxFor(m => m.Name_En, new Dictionary<string, object>() { { "id", "Name_En" }, { "class", "layui-input" }, { "lay-verify", "required" } })
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (string.IsNullOrEmpty(Model.UniqueId))
+        {
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">@Html.LabelFor(m => m.Password)</label>
+                        <div class="layui-input-inline">
+                            @Html.PasswordFor(m => m.Password, new Dictionary<string, object>() { { "id", "Password" }, { "class", "layui-input" }, { "lay-verify", "required" } })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="layui-form-item">
+            <label class="layui-form-label"><font color="red">*</font>@Html.LabelFor(m => m.Status)</label>
+            <div class="layui-input-inline">
+                <select name="Status" lay-verify="required">
+                    @if (Model.Status == 0)
+                    {
+                        <option value="" selected="selected">请选择</option>
+                        <option value="@Status_Enum.启用.GetHashCode()">@Status_Enum.启用</option>
+                        <option value="@Status_Enum.禁用.GetHashCode()">@Status_Enum.禁用</option>
+                    }
+                    else
+                    {
+                        if (Model.Status == Status_Enum.启用.GetHashCode())
+                        {
+                            <option value="@Status_Enum.启用.GetHashCode()" selected="selected">@Status_Enum.启用</option>
+                            <option value="@Status_Enum.禁用.GetHashCode()">@Status_Enum.禁用</option>
+                        }
+                        else
+                        {
+                            <option value="@Status_Enum.启用.GetHashCode()">@Status_Enum.启用</option>
+                            <option value="@Status_Enum.禁用.GetHashCode()" selected="selected">@Status_Enum.禁用</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-left:30px;">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn layui-btn-normal" lay-submit lay-filter="btnSave">Save</button>
+                <button type="button" class="layui-btn layui-btn-primary" id="btnCancel" onclick="parent.layer.closeAll();">Close</button>
+            </div>
+        </div>
+    </form>
+</body>
+
+<script>
+    var table;
+    var form;
+    layui.use(['form', 'element', 'layer', 'table'], function () {
+        form = layui.form;
+        table = layui.table;
+
+        //保存消息
+        $(function () {
+            var success = '@Model.SuccessCode';
+            if (success.toUpperCase() == 200) {
+                $.mylayer.resultSuccess('success');
+                setTimeout(function () {
+                        parent.tableRender();
+                        parent.layer.closeAll();
+                    }, 1500);
+            }
+            else if (success.toUpperCase() == 500)
+            {
+                $.mylayer.resultFail("保存失败！");
+            }
+        });
+    })
+</script>

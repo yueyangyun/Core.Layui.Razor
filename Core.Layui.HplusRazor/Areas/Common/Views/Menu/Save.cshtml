@@ -1,0 +1,132 @@
+﻿@{
+    Layout = "_LayuiLayout";
+}
+@model Menus
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <style type="text/css">
+        .layui-form-label {
+            width: 110px;
+        }
+    </style>
+</head>
+<body>
+    <br />
+    <form class="layui-form" lay-filter="EditForm" action="/Common/Menu/Save" method="post">
+        @Html.HiddenFor(m => m.Id)
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label"><font color="red">*</font>@Html.LabelFor(m => m.Name)</label>
+                <div class="layui-input-inline">
+                    @Html.TextBoxFor(m => m.Name, new Dictionary<string, object>() { { "id", "Name" }, { "class", "layui-input" }, { "lay-verify", "required" } })
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">@Html.LabelFor(m => m.Url)</label>
+                <div class="layui-input-inline">
+                    @Html.TextBoxFor(m => m.Url, new Dictionary<string, object>() { { "id", "Url" }, { "class", "layui-input" } })
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">@Html.LabelFor(m => m.Icon)</label>
+                <div class="layui-input-inline">
+                    @Html.TextBoxFor(m => m.Icon, new Dictionary<string, object>() { { "id", "Icon" }, { "class", "layui-input" } })
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">@Html.LabelFor(m => m.ParentId)</label>
+                <div class="layui-input-inline">
+                    @Html.TextBoxFor(m => m.ParentId, new Dictionary<string, object>() { { "id", "ParentId" }, { "class", "layui-input" } })
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><font color="red">*</font>@Html.LabelFor(m => m.Level)</label>
+            <div class="layui-input-inline">
+                <select name="Level" lay-verify="required">
+                    @if (Model.Level == 0)
+                    {
+                        <option value="" selected="selected">请选择</option>
+                        <option value="@MenuLevel_Enum.一级菜单.GetHashCode()">@MenuLevel_Enum.一级菜单</option>
+                        <option value="@MenuLevel_Enum.二级菜单.GetHashCode()">@MenuLevel_Enum.二级菜单</option>
+                    }
+                    else
+                    {
+                        if (Model.Level == MenuLevel_Enum.一级菜单.GetHashCode())
+                        {
+                            <option value="@MenuLevel_Enum.一级菜单.GetHashCode()" selected="selected">@MenuLevel_Enum.一级菜单</option>
+                            <option value="@MenuLevel_Enum.二级菜单.GetHashCode()">@MenuLevel_Enum.二级菜单</option>
+                        }
+                        else
+                        {
+                            <option value="@MenuLevel_Enum.一级菜单.GetHashCode()">@MenuLevel_Enum.一级菜单</option>
+                            <option value="@MenuLevel_Enum.二级菜单.GetHashCode()" selected="selected">@MenuLevel_Enum.二级菜单</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><font color="red">*</font>@Html.LabelFor(m => m.Status)</label>
+            <div class="layui-input-inline">
+                <select name="Status" lay-verify="required">
+                    @if (Model.Status == 0)
+                    {
+                        <option value="" selected="selected">请选择</option>
+                        <option value="@Status_Enum.启用.GetHashCode()">@Status_Enum.启用</option>
+                        <option value="@Status_Enum.禁用.GetHashCode()">@Status_Enum.禁用</option>
+                    }
+                    else
+                    {
+                        if (Model.Status == Status_Enum.启用.GetHashCode())
+                        {
+                            <option value="@Status_Enum.启用.GetHashCode()" selected="selected">@Status_Enum.启用</option>
+                            <option value="@Status_Enum.禁用.GetHashCode()">@Status_Enum.禁用</option>
+                        }
+                        else
+                        {
+                            <option value="@Status_Enum.启用.GetHashCode()">@Status_Enum.启用</option>
+                            <option value="@Status_Enum.禁用.GetHashCode()" selected="selected">@Status_Enum.禁用</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-left:30px;">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn layui-btn-normal" lay-submit lay-filter="btnSave">Save</button>
+                <button type="button" class="layui-btn layui-btn-primary" id="btnCancel" onclick="parent.layer.closeAll();">Close</button>
+            </div>
+        </div>
+    </form>
+</body>
+
+<script>
+    var table;
+    var form;
+    layui.use(['form', 'element', 'layer', 'table'], function () {
+        form = layui.form;
+        table = layui.table;
+
+        //保存消息
+        $(function () {
+            var success = '@Model.SuccessCode';
+            if (success.toUpperCase() ==200) {
+                $.mylayer.resultSuccess('success');
+                setTimeout(function () {
+                        parent.tableRender();
+                        parent.layer.closeAll();
+                    }, 1500);
+            }
+            else if (success.toUpperCase() == 500){
+                $.mylayer.resultFail("保存失败！");
+            }
+        });
+    })
+</script>

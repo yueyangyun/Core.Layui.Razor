@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @* css生效 *@
+    <link rel="stylesheet" href="~/_content/Core.Layui.HplusRazor/css/razorlib.css?v=@DateTime.Now.Ticks" />
+    <link rel="stylesheet" href="~/_content/Core.Layui.HplusRazor/js/layui-v2.5.5/layui/css/layui.css?v=@DateTime.Now.Ticks" />
+
+    @* js生效写法 *@
+    <script src="~/_content/Core.Layui.HplusRazor/js/layui-v2.5.5/layui/layui.js?v=@DateTime.Now.Ticks"></script>
+    <script src="~/_content/Core.Layui.HplusRazor/js/jquery.js?v=@DateTime.Now.Ticks"></script>
+    <script src="~/_content/Core.Layui.HplusRazor/js/xxx-layer.js?v=@DateTime.Now.Ticks"></script>
+    <script src="~/_content/Core.Layui.HplusRazor/js/com.No1.js"></script>
+    <script src="~/_content/Core.Layui.HplusRazor/js/view-js.js"></script>
+</head>
+<body>
+    @*<partial name="_Header" />*@
+    <div>
+        @RenderBody()
+    </div>
+    @*<partial name="_Footer" />*@
+    @RenderSection("scripts", required: false)
+</body>
+</html>
